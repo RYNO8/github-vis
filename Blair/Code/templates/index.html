@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block pg_title %}{% endblock %}
+
+{% block pg_content %}
+<form action="" method="post" novalidate>
+{{ form.hidden_tag() }}
+{{ form.url.label }}<br>
+{{ form.url() }}<br><br>
+{{ form.owner.label }}<br>
+{{ form.owner() }}<br><br>
+{{ form.repo.label }}<br>
+{{ form.repo() }}<br><br>
+{{ form.submit() }}
+</form>
+{% endblock %}

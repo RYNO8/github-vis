@@ -1,19 +1,11 @@
 import sqlite3
 from flask import g
+from hashlib import pbkdf2_hmac
+
+salt = b'\xfa#\xb3\xd5\x1ac\xa4\xce2\x8f\xdf*\xfb\xc6\x8f\x99\x18\\{\xce-\xd0\xb4\x93\x97\xf3\xa0\xabbjV/'
+
 
 DATABASE = 'login.db'
-
-def get_db():
-    db = getattr(g, '_database', None)
-    if db is None:
-        db = g._database = sqlite3.connect(DATABASE)
-    return db
-
-def query_db(query, args=(), one=False):
-    cur = get_db().execute(query, args)
-    rv = cur.fetchall()
-    cur.close()
-    return (rv[0] if rv else None) if one else rv
 
 def establishConnection(func):
     #saves code repetition so i don't have to write conn = ... cur = ... everytime
@@ -35,6 +27,27 @@ def establishConnection(func):
             return rv
     return connection
 
+
+
+
+def get_db():
+    db = getattr(g, '_database', None)
+    if db is None:
+        db = g._database = sqlite3.connect(DATABASE)
+    return db
+
+def query_db(query, args=(), one=False):
+    cur = get_db().execute(query, args)
+    rv = cur.fetchall()
+    cur.close()
+    return (rv[0] if rv else None) if one else rv
+
+def getHash(password):
+    #return pbkdf2_hmac('sha256', password.encode('utf-8'), salt, 100000)
+    #return str(hash(password))
+    return password
+
+
 @establishConnection
 def createTable(cur):
     cur.execute('''CREATE TABLE user
@@ -55,6 +68,7 @@ def getData(cur, userId):
 
 @establishConnection
 def addUser(cur, username, password, email, phone):
+    password = getHash(password)
     cur.execute("INSERT INTO user (username, password, email, phone) VALUES (?, ?, ?, ?)",
                 (username, password, email, phone))
 
@@ -65,18 +79,28 @@ def deleteUser(cur, userId):
 
 @establishConnection
 def updatePassword(cur, userId, newPassword):
-    cur.execute("UPDATE user SET password=? WHERE id=?", (newPassword, userId))
+    password = getHash(newPassword)
+    cur.execute("UPDATE user SET password=? WHERE id=?", (password, userId))
+
+@establishConnection
+def getUsername(cur, userId):
+    cur.execute("SELECT username FROM user WHERE id=?", (userId,))
+    return cur.fetchone()[0]
 
 @establishConnection
 def getUserId(cur, username):
     cur.execute("SELECT id FROM user WHERE username=?", (username,))
-    return cur.fetchone()[0]
+    val = cur.fetchone()
+    return val[0] if val else None
+
+
 
 @establishConnection
 def checkPassword(cur, username, password):
+    password = getHash(password)
     try:
         cur.execute("SELECT password FROM user WHERE username=?", (username,))
-        if cur.fetchone()[0]== password:
+        if getHash(cur.fetchone()[0])== password:
             return True
         else:
             return False

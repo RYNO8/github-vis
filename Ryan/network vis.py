@@ -5,7 +5,7 @@ import string
 
 app = Flask(__name__)
 g = Github("test-user1337", "cyrilhas2iq")
-SEARCH_NODES = 20
+NUM_FRIENDS = 20 #number of neighbouring nodes to explore. the graph will contain these many friends and their friends
 
 def favLanguage(user):
     if isinstance(user, NamedUser.NamedUser):
@@ -16,22 +16,27 @@ def favLanguage(user):
         raise
         
 def bfs(user):
-    """treats all edges as bidirectional edges based on followers (not followings)"""
-    #time taken exponential to DEPTH and len(followers)
+    """https://en.wikipedia.org/wiki/Breadth-first_search"""
+    """NOTE: it would tend to explore friends with more followers"""
     
+    # queue
     todo = [user] # list of user objects
+
+    # graph representation
     allUsers = [user] # list of of user objects
     edges = [] # list of tuples representing edges (string, string)
-    for depth in range(SEARCH_NODES):
+    
+    for depth in range(NUM_FRIENDS):
         curr = todo.pop(0)
-        print(curr)
+        print("Exploring:", curr)
         
         for child in list(curr.get_followers()):
             if not child in allUsers:
                 todo.append(child)
                 allUsers.append(child)
             edges.append((allUsers.index(curr), allUsers.index(child)))
-            
+
+    # find bidrectional edges. if a->b and b->a, a<->b
     edgeDirection = []
     while edges:
         curr = edges.pop()
@@ -46,8 +51,11 @@ def bfs(user):
 @app.route("/graph", methods=["GET", "POST"])
 def main():
     """\
-get request: view graph for default user ("RYNO8")
-post request {"user": x}: view graph for user x"""
+default user = "RYNO8"
+
+USAGE
+GET /graph?user=RYNO8
+POST /graph {"user": "RYNO8"}"""
     user = "RYNO8"
     if request.method == "GET":
         user = request.args.get("user", user)
@@ -55,13 +63,12 @@ post request {"user": x}: view graph for user x"""
         user = request.form.get("user", user)
     print(user)
     
-    try:
+    # cache previous graphs during development / debugging
+    try: 
         allUsers, edges = pickle.load(open(f"cache\{user}", "rb"))
     except FileNotFoundError:
         allUsers, edges = bfs(g.get_user(user))
-        
-    with open(f"cache\{user}", "wb") as f:
-        pickle.dump((allUsers, edges), f)
+        pickle.dump((allUsers, edges), open(f"cache\{user}", "wb"))
     
     return render_template(
         "network vis.html",

@@ -11,7 +11,7 @@ def collect_data(directory):
         data = json.loads(response.text)
         return data
 
-g = Github("RichardBao1","435876897Richardbao")
+g = Github("")
 for repo in g.get_user().get_repos():
     print(repo.name)
 

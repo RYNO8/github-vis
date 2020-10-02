@@ -13,18 +13,18 @@ def establishConnection(func):
         conn = sqlite3.connect(DATABASE)
         try:
             cur = conn.cursor()
-            rv = func(cur, *args, **kwargs)
+            val = func(cur, *args, **kwargs)
         except Exception as e:
-            conn.rollback()
+            conn.rollback() #undoes the recent changes to database
             raise e
         else:
-            if rv == None: #if you don't return anything i.e. not a SELECT keyword
+            if val == None: #if you don't return anything i.e. not a SELECT keyword
                 conn.commit()
         finally:
             conn.close()
 
-        if rv != None:
-            return rv
+        if val != None: #if there is an actual value that has been passed
+            return val
     return connection
 
 

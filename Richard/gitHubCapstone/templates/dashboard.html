@@ -12,5 +12,6 @@
 
     <p>Dashboard</p>
     <p>Welcome to your dashboard</p>
+    <p>Access token: {{ session['access_token'] }}</p>
     <li><a href="{{url_for('logout')}}">Log Out</a></li>
 {%  endblock %}

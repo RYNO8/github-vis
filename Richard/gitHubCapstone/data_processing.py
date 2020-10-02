@@ -93,8 +93,6 @@ def getUserId(cur, username):
     val = cur.fetchone()
     return val[0] if val else None
 
-
-
 @establishConnection
 def checkPassword(cur, username, password):
     password = getHash(password)

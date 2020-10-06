@@ -1,9 +1,9 @@
 import sqlite3
 from flask import g
+
 from hashlib import pbkdf2_hmac
 
-salt = b'\xfa#\xb3\xd5\x1ac\xa4\xce2\x8f\xdf*\xfb\xc6\x8f\x99\x18\\{\xce-\xd0\xb4\x93\x97\xf3\xa0\xabbjV/'
-
+salt = b'\x15\xdc\xe7\r7\x18\xcfF\xba\xbf\xbe5\xf2A;!\xe7c\x1cRQ\xf8C\x8f:\x86BqO\x9d\xb9)'
 
 DATABASE = 'login.db'
 
@@ -43,9 +43,7 @@ def query_db(query, args=(), one=False):
     return (rv[0] if rv else None) if one else rv
 
 def getHash(password):
-    #return pbkdf2_hmac('sha256', password.encode('utf-8'), salt, 100000)
-    #return str(hash(password))
-    return password
+    return pbkdf2_hmac('sha256', password.encode('utf-8'), salt, 100000)
 
 
 @establishConnection
@@ -95,14 +93,25 @@ def getUserId(cur, username):
 
 @establishConnection
 def checkPassword(cur, username, password):
-    password = getHash(password)
     try:
         cur.execute("SELECT password FROM user WHERE username=?", (username,))
-        if getHash(cur.fetchone()[0])== password:
+        if getHash(password)== cur.fetchone()[0]:
             return True
         else:
             return False
     except:
         return False
 
+@establishConnection
+def changeDefault(cur, settingDict, username):
+    cur.execute('''UPDATE user
+                SET colourTheme=?
+                WHERE username=?''',
+                 (settingDict['colourTheme'], username))
 
+
+def getDefault(username):
+    userId = getUserId(username)
+    userData = getData(userId)
+    defaults = userData[0][5:]
+    return defaults

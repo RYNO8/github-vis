@@ -15,6 +15,8 @@ g = Github("")
 for repo in g.get_user().get_repos():
     print(repo.name)
 
+
+"""
 username = 'RichardBao1'
 token = 'token'
 login = requests.get('https://api.github.com/search/repositories?q=github+api', auth=(username, token))
@@ -23,3 +25,6 @@ print(login)
 import requests
 r = requests.get('https://github.com/timeline.json')
 r.json()
+"""
+
+

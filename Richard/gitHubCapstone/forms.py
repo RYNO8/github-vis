@@ -1,6 +1,7 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField, PasswordField, BooleanField,IntegerField
+from wtforms import StringField, SubmitField, PasswordField, BooleanField,IntegerField, SelectField
 from wtforms.validators import DataRequired, InputRequired, Length, Email
+from data_processing import getDefault
 
 
 class SignUpForm(FlaskForm):
@@ -19,4 +20,12 @@ class LoginForm(FlaskForm):
 class AuthGitUserForm(FlaskForm):
     username = StringField('username', validators = [InputRequired()])
     submit = SubmitField('OK')
+
+
+
+class UserSettingsForm(FlaskForm):
+    default = ['Dark']
+    colourThemeChoices = ['Dark', 'Light'] #could be value,label pairs
+    colourTheme = SelectField('Colour Theme', choices=colourThemeChoices, default=default[0])
+    submit = SubmitField('UPDATE')
 

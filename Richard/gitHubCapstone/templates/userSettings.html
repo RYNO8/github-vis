@@ -1,25 +1,26 @@
 {% extends 'dashboardBase.html' %}
+{% block page_title %} User Settings {%  endblock %}
 
-{%  block page_title %} Dashboard {%  endblock %}
-
-{%  block page_content %}
+{% block page_content %}
+    <h1> Settings</h1>
+    <hr>
     {% with messages = get_flashed_messages() %}
         {% if messages %}
             {% for msg in messages %}
                 <p>{{ msg }}</p>
             {% endfor %}
         {% endif %}
+        <hr>
     {%  endwith %}
-
     <form action="" method="post" id="form" novalidate>
         {{ form.hidden_tag() }}
         <p>
-            {{ form.username.label }}
-            {{ form.username(size=40, placeholder = 'Enter Your GITHUB Username')}}
+            {{ form.colourTheme.label }}
+            {{ form.colourTheme}}
         </p>
         <p class="error_p">
             <ul>
-                {% for error in form.username.errors %}
+                {% for error in form.colourTheme.errors %}
                     <li style="color:red;" class="error">{{error}}</li>
                 {% endfor %}
             </ul>
@@ -31,5 +32,4 @@
 
     </form>
 
-    <li><a href="{{url_for('logout')}}">Log Out</a></li>
 {% endblock %}

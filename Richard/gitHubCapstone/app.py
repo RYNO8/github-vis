@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request, url_for,redirect, flash, session
 from flask_bootstrap import Bootstrap
-from forms import LoginForm, SignUpForm, AuthGitUserForm
+from forms import LoginForm, SignUpForm, AuthGitUserForm, UserSettingsForm
 from data_processing import *
 import json
 import requests
@@ -93,6 +93,26 @@ def authorise():
     """
     return redirect(url_for('dashboard'))
 
+@app.route("/settings", methods=["GET", "POST"])
+def settings():
+    if 'user' not in session:
+        return redirect(url_for('home'))
+
+    form = UserSettingsForm()
+    if form.validate_on_submit():
+        form_info = request.form
+        changeDefault(form_info, session['user'])
+        flash('Settings has been updated')
+
+    return render_template('userSettings.html', form=form)
+
+@app.route("/about")
+def about():
+    if 'user' not in session:
+        return redirect(url_for('home'))
+
+    return render_template('about.html')
+
 @app.route("/logout")
 def logout():
     sessionKeys = ('user', 'access_token')
@@ -129,8 +149,7 @@ def get_access_token(code):
 def access_token():
     if 'access_token' in session:
         return session['access_token']
-    else:
-        return None
+    return None
 
 def login_required(func):
     #doesn't work for some reason - when you log in, and theres a redirect. idk

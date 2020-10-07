@@ -1,0 +1,212 @@
+<!doctype html>
+<html>
+<head>
+	<!-- see visjs https://visjs.github.io/vis-network/docs/network/ -->
+	<script type="text/javascript" src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
+	<script type="text/javascript" src="https://visjs.github.io/vis-network/standalone/umd/vis-network.min.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+	<style>
+		body {font-family: Arial, Helvetica, sans-serif;}
+
+/* The Modal (background) */
+.modal {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  padding-top: 100px; /* Location of the box */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+/* Modal Content */
+.modal-content {
+  position: relative;
+  background-color: #fefefe;
+  margin: auto;
+  padding: 0;
+  border: 1px solid #888;
+  width: 80%;
+  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
+  -webkit-animation-name: animatetop;
+  -webkit-animation-duration: 0.4s;
+  animation-name: animatetop;
+  animation-duration: 0.4s
+}
+
+/* Add Animation */
+@-webkit-keyframes animatetop {
+  from {top:-300px; opacity:0} 
+  to {top:0; opacity:1}
+}
+
+@keyframes animatetop {
+  from {top:-300px; opacity:0}
+  to {top:0; opacity:1}
+}
+
+/* The Close Button */
+#modal-close {
+  color: white;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+#modal-close:hover, modal-close:focus {
+  color: #000;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.modal-header {
+  padding: 2px 16px;
+  background-color: #5cb85c;
+  color: white;
+}
+
+.modal-body {padding: 2px 16px;}
+
+.modal-footer {
+  padding: 2px 16px;
+  background-color: #5cb85c;
+  color: white;
+}
+
+	</style>
+</head>
+<body>
+	<div id="mynetwork" style="width: 100%; height: 100%;"></div>
+
+	<!-- The Modal -->
+	<div id="myModal" class="modal">
+		<!-- Modal content -->
+		<div class="modal-content">
+			<div class="modal-header">
+				<span id="modal-close">&times;</span>
+				<h2>Visit User Profile</h2>
+			</div>
+			<div class="modal-body" style="padding: 20px">
+				<a id="modal-link" target="_blank" href="/users?user=PLACEHOLDER">Visit the profile of PLACEHOLDER</a>
+			</div>
+		</div>
+	</div>
+
+	
+	
+	<script type="text/javascript">
+		var modal = document.getElementById("myModal");
+		
+		// When the user clicks on <span> (x), close the modal
+		document.getElementById("modal-close").onclick = function() { modal.style.display = "none"; }
+		
+		// When the user clicks anywhere outside of the modal, close it
+		window.onclick = function(event) {
+		  if (event.target == modal) {
+			modal.style.display = "none";
+		  }
+		}
+		
+		console.log([{{ nodes | safe }}, {{ repos | safe  }}]);
+		var nodes = new vis.DataSet([{{ nodes | safe }}, {{ repos | safe }}]);
+		var allNodes = nodes.get({ returnType: "Object" });
+		var edges = new vis.DataSet([{{ edges | safe }}]);
+		
+		var network = new vis.Network(
+			document.getElementById('mynetwork'), 
+			{nodes: nodes, edges: edges},
+			{
+				physics: {
+					stabilization: true,
+				},
+				autoResize: true,
+				height: '600px',
+				width: '100%',
+				layout: {
+					//randomSeed: 69,
+					improvedLayout: false, // handles large graphs better
+				},
+				
+				nodes: {
+					shape: "dot",
+					scaling: {
+						label: { min: 8,max: 30 },
+					},
+					font: { size: 12, face: "Tahoma" },
+					color: "#00AEEF",
+					borderWidth: 0,
+					shadow: true,
+				},
+				edges: {
+					color: { inherit: "from" },
+					width: 0.15,
+					smooth: { type: "continuous" },
+					hoverWidth: function (width) {return width-1;},
+					//shadow: true, // laggy
+				},
+				interaction: {
+					hideEdgesOnDrag: true,
+					hideEdgesOnZoom: true,
+					tooltipDelay: 200,
+				},
+			}
+		);
+		
+		network.on("doubleClick", function(properties) {
+			let name = allNodes[properties.nodes[0]].label;
+			document.getElementById("modal-link").href= "/users?user=" + name;
+			//document.getElementById("modal-link").href= "https://github.com/" + name;
+			document.getElementById("modal-link").text= "Visit the profile of " + name;
+			modal.style.display = "block";
+		});
+		
+		
+		network.on("click", function neighbourhoodHighlight(params) {
+			var updateArray = [];
+			for (var nodeId in allNodes) {
+				allNodes[nodeId].opacity = 1;
+				if (allNodes[nodeId].hiddenLabel !== undefined) {
+					allNodes[nodeId].label = allNodes[nodeId].hiddenLabel;
+					allNodes[nodeId].hiddenLabel = undefined;
+				}
+				if (allNodes.hasOwnProperty(nodeId)) updateArray.push(allNodes[nodeId]);
+			}
+			nodes.update(updateArray);
+        
+			if (params.nodes.length > 0) {
+				var nodeDeg0 = params.nodes[0];
+				var nodesDeg1 = network.getConnectedNodes(nodeDeg0);
+				
+				for (var nodeId in allNodes) { // mark all nodes grey
+					allNodes[nodeId].opacity = 0.2;
+					if (allNodes[nodeId].hiddenLabel === undefined) {
+						allNodes[nodeId].hiddenLabel = allNodes[nodeId].label;
+						allNodes[nodeId].label = undefined;
+					}
+				}
+				for (var i = 0; i < nodesDeg1.length; i++) { // first degree nodes
+					allNodes[nodesDeg1[i]].opacity = 0.9;
+					if (allNodes[nodesDeg1[i]].hiddenLabel !== undefined) {
+						allNodes[nodesDeg1[i]].label =
+						allNodes[nodesDeg1[i]].hiddenLabel;
+						allNodes[nodesDeg1[i]].hiddenLabel = undefined;
+					}
+				}
+				allNodes[nodeDeg0].opacity = 1; // the main node
+				if (allNodes[nodeDeg0].hiddenLabel !== undefined) {
+					allNodes[nodeDeg0].label = allNodes[nodeDeg0].hiddenLabel;
+					allNodes[nodeDeg0].hiddenLabel = undefined;
+				}
+				var updateArray = [];
+				for (nodeId in allNodes) { // transform the object into an array
+					if (allNodes.hasOwnProperty(nodeId)) updateArray.push(allNodes[nodeId]);
+				}
+				nodes.update(updateArray);
+			}
+		});
+	</script>
+</body>
+</html>

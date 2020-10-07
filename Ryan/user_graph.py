@@ -1,9 +1,9 @@
-from flask import *
+from flask import current_app as app
+from flask import request, render_template
 from github import Github, NamedUser
 import pickle
 import string
 
-app = Flask(__name__)
 g = Github("test-user1337", "cyrilhas2iq")
 NUM_FRIENDS = 20 #number of neighbouring nodes to explore. the graph will contain these many friends and their friends
 
@@ -48,8 +48,8 @@ def bfs(user):
     
     return allUsers, edgeDirection
 
-@app.route("/graph", methods=["GET", "POST"])
-def main():
+@app.route("/user_graph", methods=["GET", "POST"])
+def user_graph():
     """\
 default user = "RYNO8"
 
@@ -65,13 +65,13 @@ POST /graph {"user": "RYNO8"}"""
     
     # cache previous graphs during development / debugging
     try: 
-        allUsers, edges = pickle.load(open(f"cache\{user}", "rb"))
+        allUsers, edges = pickle.load(open(f"user_graph_cache\{user}", "rb"))
     except FileNotFoundError:
         allUsers, edges = bfs(g.get_user(user))
-        pickle.dump((allUsers, edges), open(f"cache\{user}", "wb"))
+        pickle.dump((allUsers, edges), open(f"user_graph_cache\{user}", "wb"))
     
     return render_template(
-        "network vis.html",
+        "user_graph.html",
         nodeLabels=list(string.ascii_uppercase), #TODO: fix
         nodes=", ".join([f"""{{
             id: {i},
@@ -84,6 +84,4 @@ POST /graph {"user": "RYNO8"}"""
         }}""" for i, user in enumerate(allUsers)]),
         edges=", ".join([f"{{ from: {i[0]}, to: {i[1]}, arrows: '{i[2]}' }}" for i in edges])
     )
-
-app.run(debug=True)
 

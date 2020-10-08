@@ -2,8 +2,9 @@ from flask import Flask, render_template, request, url_for,redirect, flash, sess
 from flask_bootstrap import Bootstrap
 from forms import LoginForm, SignUpForm, AuthGitUserForm, UserSettingsForm
 from data_processing import *
-import json
-import requests
+from github import Github, NamedUser
+import requests, pickle
+
 
 app = Flask(__name__)
 app.secret_key="5kucTBxUZ2sE3tQsP8TDgS6mp4mYWM34JNNntGfxKgGhzwCj3q8JHQwVVqBsU9sSB5TUM5"
@@ -46,12 +47,18 @@ def signup_page():
         form_info = request.form
         username,password,email,phone = form_info['username'], form_info['password'],\
                                         form_info['email'], form_info['phone']
+
+        retypePassword = form_info['retypePassword']
+        if retypePassword != password:
+            flash("Password's do not match. Please try again.")
         try:
-            addUser(username,password,email,phone)
+            addUser(username, password, email, phone)
+        except:
+            flash("Unique constraint has failed. Please try again.")
+            return redirect(url_for('signup_page'))
+        else:
             session['user'] = username
             return redirect(url_for('dashboard'))
-        except:
-            return 'hello'
     return render_template('signUp.html', form=form)
 
 @app.route('/signedUp')
@@ -151,13 +158,14 @@ def access_token():
         return session['access_token']
     return None
 
-def login_required(func):
-    #doesn't work for some reason - when you log in, and theres a redirect. idk
-    def inner(*args, **kwargs):
-        if 'user' not in session:
-            return redirect(url_for('home'))
-        return func(*args, **kwargs)
-    return inner
+# def login_required(func):
+#     #doesn't work for some reason - when you log in, and theres a redirect. idk
+#     def inner(*args, **kwargs):
+#         if 'user' not in session:
+#             return redirect(url_for('home'))
+#         return func(*args, **kwargs)
+#     return inner
+
 
 if __name__ == '__main__':
     app.run(debug=True)

@@ -6,7 +6,7 @@
 
 {% block styles %}
 {{super()}}
-<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" xmlns="http://www.w3.org/1999/html">
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 {% endblock %}
 
 {% block navbar %}
@@ -19,7 +19,9 @@
             <div class="navbar-links">
                 <a href="/dashboard"> Dashboard</a>
                 <div class="dropdown dropdown-nav">
-                    <button class="dropbtn">{{ session['user'] }}</button>
+                    <button class="dropbtn">
+                        {{ session['user'] }}<img src="static/dropdownicon.png" id="dropdown-icon">
+                    </button>
                     <div class="dropdown-content">
                         <a href="/settings">User Settings</a>
                         <a href="/about">About</a>
@@ -34,7 +36,7 @@
 
 {% block content %}
     <body>
-        <div class="container-fluid">
+        <div class="container-fluid body-content">
             {% block page_content %}{% endblock %}
         </div>
 

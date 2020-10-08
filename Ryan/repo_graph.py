@@ -6,7 +6,7 @@ import string
 import time
 
 g = Github("test-user1337", "cyrilhas2iq")
-MAX_TIME = 20 # bfs() will take <= 2 seconds
+MAX_TIME = 5 # bfs() will take <= 5 seconds
 BUFFER = 1000
 
 def bfs(user=None, repo=None):
@@ -14,7 +14,7 @@ def bfs(user=None, repo=None):
     """NOTE: it would tend to explore friends with more followers"""
     
     # queue
-    todo = [user or repo] # list of user or repo objects
+    todo = [user or repo] # list of user objects or repo objects
 
     # graph representation
     allUsers, allRepos = [], [] # list of of user objects and repo objects
@@ -25,7 +25,7 @@ def bfs(user=None, repo=None):
     edges = set() # set of tuples representing edges user to repo (int, int)
     start = time.time()
     
-    while time.time() - start < MAX_TIME:
+    while todo and time.time() - start < MAX_TIME:
         curr = todo.pop(0)
         print("Exploring:", curr)
         
@@ -46,13 +46,15 @@ def bfs(user=None, repo=None):
         else:
             raise Exception
         
+    [user.bio for user in allUsers] #retrieves bio data, so it can be pickled
     return allUsers, allRepos, edges
+
+def sanitise(text):
+    return text.replace("'", "\\'").replace("\r\n", "<br>")
 
 @app.route("/repo_graph", methods=["GET", "POST"])
 def repo_graph():
     """\
-default user = "RYNO8"
-
 USAGE
 GET /repo_graph?user=RYNO8
 POST /repo_graph {"user": "RYNO8"}
@@ -66,12 +68,14 @@ POST /repo_graph {"repo": "chartjs/Chart.js"}"""
     elif request.method == "POST":
         user = request.form.get("user", user)
         repo = request.form.get("repo", repo)
-    if (user == None) == (repo == None):
-        return "invalid"
+    if (user == None) == (repo == None): #if (both user / repo) OR (neither user / repo)
+        return sanitise("invalid\n" + repo_graph.__doc__)
 
     try: # cache previous graphs during development / debugging
-        #allUsers, allRepos, edges = pickle.load(open(f"repo_graph_cache\{user}", "rb"))
-        raise FileNotFoundError
+        if user:
+            allUsers, allRepos, edges = pickle.load(open(f"repo_graph_cache\{user}", "rb"))
+        else:
+            allUsers, allRepos, edges = pickle.load(open(f"repo_graph_cache\{repo.replace('/', '+')}", "rb"))
     except FileNotFoundError:
         if user:
             allUsers, allRepos, edges = bfs(user=g.get_user(user))
@@ -79,24 +83,22 @@ POST /repo_graph {"repo": "chartjs/Chart.js"}"""
         else:
             allUsers, allRepos, edges = bfs(repo=g.get_repo(repo))
             pickle.dump((allUsers, allRepos, edges), open(f"repo_graph_cache\{repo.replace('/', '+')}", "wb"))
-        
-    print(allUsers, allRepos, edges)
     
     return render_template(
         "repo_graph.html",
         nodes=", ".join([f"""{{
             id: {i},
             label: '{user.login}',
-            value: {sum(i in edge for edge in edges)**1.3},
+            value: 12,
             shape: 'circularImage',
             image: '{user.avatar_url}',
-            title: 'TODO: tooltip text',
+            {"title: '" + sanitise(user.bio) + "'," if user.bio else ""}
         }}""" for i, user in enumerate(allUsers)]),
         repos=", ".join([f"""{{
             id: {i},
             label: '{repo.name}',
-            value: {sum(i in edge for edge in edges)**1.3},
-            title: '{repo.full_name}',
+            value: 1,
+            title: 'TODO: tooltip text',
         }}""" for i, repo in enumerate(allRepos, start=BUFFER)]),
         edges=", ".join([f"{{ from: {i[0]}, to: {i[1]} }}" for i in edges])
     )

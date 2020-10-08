@@ -3,9 +3,10 @@ from flask import request, render_template
 from github import Github, NamedUser
 import pickle
 import string
+import time
 
 g = Github("test-user1337", "cyrilhas2iq")
-NUM_FRIENDS = 20 #number of neighbouring nodes to explore. the graph will contain these many friends and their friends
+MAX_TIME = 5 # bfs() will take <= 5 seconds
 
 def favLanguage(user):
     if isinstance(user, NamedUser.NamedUser):
@@ -25,8 +26,8 @@ def bfs(user):
     # graph representation
     allUsers = [user] # list of of user objects
     edges = [] # list of tuples representing edges (string, string)
-    
-    for depth in range(NUM_FRIENDS):
+    start = time.time()
+    while todo and time.time() - start < MAX_TIME:
         curr = todo.pop(0)
         print("Exploring:", curr)
         
@@ -45,22 +46,26 @@ def bfs(user):
             edgeDirection.append((*curr, "to, from"))
         else: # edge is not bidirectional
             edgeDirection.append((*curr, "to"))
-    
+            
+    [user.bio for user in allUsers] #retrieves bio data, so it can be pickled
     return allUsers, edgeDirection
+
+def sanitise(text):
+    return text.replace("'", "\\'").replace("\r\n", "<br>")
 
 @app.route("/user_graph", methods=["GET", "POST"])
 def user_graph():
     """\
-default user = "RYNO8"
-
 USAGE
 GET /graph?user=RYNO8
 POST /graph {"user": "RYNO8"}"""
-    user = "RYNO8"
+    user = None
     if request.method == "GET":
         user = request.args.get("user", user)
     elif request.method == "POST":
         user = request.form.get("user", user)
+    if not user:
+        return sanitise("invalid\n" + user_graph.__doc__)
     print(user)
     
     # cache previous graphs during development / debugging
@@ -80,7 +85,7 @@ POST /graph {"user": "RYNO8"}"""
             lang: '{favLanguage(user)}',
             shape: 'circularImage',
             image: '{user.avatar_url}',
-            title: 'TODO: tooltip text',
+            {"title: '" + sanitise(user.bio) + "'," if user.bio else ""}
         }}""" for i, user in enumerate(allUsers)]),
         edges=", ".join([f"{{ from: {i[0]}, to: {i[1]}, arrows: '{i[2]}' }}" for i in edges])
     )

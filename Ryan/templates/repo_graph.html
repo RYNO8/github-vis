@@ -79,6 +79,7 @@
 	</style>
 </head>
 <body>
+	<div>Double click on a node to be redirected to the corresponding repo or user visualisation.</div>
 	<div id="mynetwork" style="width: 100%; height: 100%;"></div>
 
 	<!-- The Modal -->
@@ -110,7 +111,7 @@
 		  }
 		}
 		
-		console.log([{{ nodes | safe }}, {{ repos | safe  }}]);
+		var BUFFER = 1000;
 		var nodes = new vis.DataSet([{{ nodes | safe }}, {{ repos | safe }}]);
 		var allNodes = nodes.get({ returnType: "Object" });
 		var edges = new vis.DataSet([{{ edges | safe }}]);
@@ -156,10 +157,18 @@
 		);
 		
 		network.on("doubleClick", function(properties) {
+			if (properties.nodes.length == 0) { return; }
 			let name = allNodes[properties.nodes[0]].label;
-			document.getElementById("modal-link").href= "/users?user=" + name;
-			//document.getElementById("modal-link").href= "https://github.com/" + name;
-			document.getElementById("modal-link").text= "Visit the profile of " + name;
+			if (properties.nodes[0] >= BUFFER) { // repo
+				document.getElementById("modal-link").href= "/repos?repo=" + name;
+				//document.getElementById("modal-link").href= "https://github.com/" + name;
+				document.getElementById("modal-link").text= "Visit the profile of " + name;
+			}
+			else { // user
+				document.getElementById("modal-link").href= "/users?user=" + name;
+				//document.getElementById("modal-link").href= "https://github.com/" + name;
+				document.getElementById("modal-link").text= "Visit the profile of " + name;
+			}
 			modal.style.display = "block";
 		});
 		

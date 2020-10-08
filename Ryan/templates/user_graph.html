@@ -180,6 +180,7 @@
 		);
 		
 		network.on("doubleClick", function(properties) {
+			if (properties.nodes.length == 0) { return; }
 			let name = allNodes[properties.nodes[0]].label;
 			document.getElementById("modal-link").href= "/users?user=" + name;
 			//document.getElementById("modal-link").href= "https://github.com/" + name;

@@ -1,5 +1,8 @@
-# Visualisation: User following / followers as a graph
+# Visualisations
 
-Run `network vis.py`
+User following / followers as a graph
+Repos and collaborators
 
-You probs need stuff like `flask` installed
+Run `main.py`
+
+You probs need stuff like `flask` and `github` installed

@@ -9,6 +9,7 @@
 <link rel="stylesheet" href="{{url_for('static', filename='style.css')}}">
 {% endblock %}
 
+
 {% block navbar %}
     <nav class="navbar navbar-default navbar-fixed-top">
         <div class="container-fluid">
@@ -30,7 +31,7 @@
 
 {% block content %}
     <body>
-        <div class="container-fluid">
+        <div class="container-fluid body-content">
             {% block page_content %}{% endblock %}
         </div>
 

@@ -1,24 +1,24 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField, PasswordField, BooleanField,IntegerField, SelectField
+from wtforms import StringField, SubmitField, PasswordField,IntegerField, SelectField
 from wtforms.validators import DataRequired, InputRequired, Length, Email
 from data_processing import getDefault
 
 
 class SignUpForm(FlaskForm):
-    username = StringField('username', validators=[InputRequired(), Length(min=5, max=15)])
-    password = PasswordField('password', validators=[InputRequired(), Length(min=4,max=80)])
-    email = StringField('email', validators=[InputRequired(), Email(message = 'Invalid Email'), Length(max=50)])
+    username = StringField('Username', validators=[InputRequired(), Length(min=5, max=15)])
+    password = PasswordField('Password', validators=[InputRequired(), Length(min=4,max=80)])
+    retypePassword = PasswordField('Retype Password', validators=[InputRequired(), Length(min=4,max=80)])
+    email = StringField('Email', validators=[InputRequired(), Email(message = 'Invalid Email'), Length(max=50)])
     phone = IntegerField('Phone Number', validators=[InputRequired()])
     submit = SubmitField('OK')
 
 class LoginForm(FlaskForm):
-    username = StringField('username', validators=[InputRequired(), Length(min=5, max=15)])
-    password = PasswordField('password', validators=[InputRequired(), Length(min=4,max=80)])
-    remember = BooleanField('remember me')
+    username = StringField('Username', validators=[InputRequired(), Length(min=5, max=15)])
+    password = PasswordField('Password', validators=[InputRequired(), Length(min=4,max=80)])
     submit = SubmitField('OK')
 
 class AuthGitUserForm(FlaskForm):
-    username = StringField('username', validators = [InputRequired()])
+    username = StringField('Username', validators = [InputRequired()])
     submit = SubmitField('OK')
 
 

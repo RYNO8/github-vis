@@ -70,13 +70,13 @@ POST /graph {"user": "RYNO8"}"""
     
     # cache previous graphs during development / debugging
     try: 
-        allUsers, edges = pickle.load(open(f"Ryan\\user_graph_cache\\{user}", "rb"))
+        allUsers, edges = pickle.load(open(f"user_graph_cache\{user}", "rb"))
     except FileNotFoundError:
         allUsers, edges = bfs(g.get_user(user))
-        pickle.dump((allUsers, edges), open(f"Ryan\\user_graph_cache\\{user}", "wb"))
+        pickle.dump((allUsers, edges), open(f"user_graph_cache\{user}", "wb"))
     
     return render_template(
-        "Ryan/templates/user_graph.html",
+        "user_graph.html",
         nodeLabels=list(string.ascii_uppercase), #TODO: fix
         nodes=", ".join([f"""{{
             id: {i},
@@ -90,5 +90,3 @@ POST /graph {"user": "RYNO8"}"""
         edges=", ".join([f"{{ from: {i[0]}, to: {i[1]}, arrows: '{i[2]}' }}" for i in edges])
     )
 
-if __name__ == "__main__":
-    raise Exception("Don't run this file on its own. run main.py from the root directory")

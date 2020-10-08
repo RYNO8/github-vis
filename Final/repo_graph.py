@@ -73,19 +73,19 @@ POST /repo_graph {"repo": "chartjs/Chart.js"}"""
 
     try: # cache previous graphs during development / debugging
         if user:
-            allUsers, allRepos, edges = pickle.load(open(f"Ryan\\repo_graph_cache\\{user}", "rb"))
+            allUsers, allRepos, edges = pickle.load(open(f"repo_graph_cache\{user}", "rb"))
         else:
-            allUsers, allRepos, edges = pickle.load(open(f"Ryan\\repo_graph_cache\\{repo.replace('/', '+')}", "rb"))
+            allUsers, allRepos, edges = pickle.load(open(f"repo_graph_cache\{repo.replace('/', '+')}", "rb"))
     except FileNotFoundError:
         if user:
             allUsers, allRepos, edges = bfs(user=g.get_user(user))
-            pickle.dump((allUsers, allRepos, edges), open(f"Ryan\\repo_graph_cache\\{user}", "wb"))
+            pickle.dump((allUsers, allRepos, edges), open(f"repo_graph_cache\{user}", "wb"))
         else:
             allUsers, allRepos, edges = bfs(repo=g.get_repo(repo))
-            pickle.dump((allUsers, allRepos, edges), open(f"Ryan\\repo_graph_cache\\{repo.replace('/', '+')}", "wb"))
+            pickle.dump((allUsers, allRepos, edges), open(f"repo_graph_cache\{repo.replace('/', '+')}", "wb"))
     
     return render_template(
-        "Ryan/templates/repo_graph.html",
+        "repo_graph.html",
         nodes=", ".join([f"""{{
             id: {i},
             label: '{user.login}',
@@ -103,5 +103,3 @@ POST /repo_graph {"repo": "chartjs/Chart.js"}"""
         edges=", ".join([f"{{ from: {i[0]}, to: {i[1]} }}" for i in edges])
     )
 
-if __name__ == "__main__":
-    raise Exception("Don't run this file on its own. run main.py from the root directory")

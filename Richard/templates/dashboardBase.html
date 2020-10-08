@@ -1,0 +1,49 @@
+{% extends 'Richard/templates/base.html' %}
+
+{% block title %}
+    {% block page_title %}{% endblock %} - GITHUB
+{% endblock %}
+
+{% block styles %}
+{{super()}}
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+{% endblock %}
+
+{% block navbar %}
+    <nav class="navbar navbar-default navbar-fixed-top">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand header-size" href="/">Github <span><img src="/static/logo.png" class="logo-size"></span></a>
+            </div>
+
+            <div class="navbar-links">
+                <a href="/dashboard"> Dashboard</a>
+                <div class="dropdown dropdown-nav">
+                    <button class="dropbtn">
+                        {{ session['user'] }}<img src="static/dropdownicon.png" id="dropdown-icon">
+                    </button>
+                    <div class="dropdown-content">
+                        <a href="/settings">User Settings</a>
+                        <a href="/about">About</a>
+                        <a href="{{ url_for('logout') }}" id="logout-button">Logout</a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </nav>
+{% endblock %}
+
+{% block content %}
+    <body>
+        <div class="container-fluid body-content">
+            {% block page_content %}{% endblock %}
+        </div>
+
+        <div class="container-fluid footer">
+            <hr>
+            <p class="panel-footer footer-text"> Nice<a href="#" class="footer-right">Back to Top</a></p>
+        </div>
+    </body>
+
+{% endblock %}

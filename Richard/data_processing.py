@@ -5,7 +5,7 @@ from hashlib import pbkdf2_hmac
 
 salt = b'\x15\xdc\xe7\r7\x18\xcfF\xba\xbf\xbe5\xf2A;!\xe7c\x1cRQ\xf8C\x8f:\x86BqO\x9d\xb9)'
 
-DATABASE = 'login.db'
+DATABASE = 'Richard/login.db'
 
 def establishConnection(func):
     #saves code repetition so i don't have to write conn = ... cur = ... everytime

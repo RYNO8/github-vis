@@ -1,3 +1,7 @@
+#### TODO ####
+# implement user visualisation from url: /users?user=[username here]
+# find a better url name on line 54 (you cant have it at "/")
+
 #links:
 #parameter passing in urls: https://stackoverflow.com/questions/24892035/how-can-i-get-the-named-parameters-from-a-url-using-flask
 
@@ -55,12 +59,6 @@ lang = {}
 # commits = requests.get(f"https://api.github.com/repos/ryno8/inquit/commits", headers=def_header).json()
 
 
-# print("user_info =", g.get_user("ryno8"))
-# print("ryno_repo info:")
-# print("lazy get_repo =", g.get_repo("ryno8", lazy=True))
-# print("unlazy get_repo =", g.get_repo("ryno8"))
-# print(g.get_repos())
-
 
 # result = get_repo("contributors")
 # for i in result: print(i)
@@ -90,16 +88,11 @@ arryan = """social media side- using ryan's map
 ryno = """fav lang function"""
 
 
-def fav_lang(repos):
-    allLangs = {}
-    for repo in repos:
-        repoLangs = get_repo("languages", owner=repo["owner"]["login"], repo=repo["name"])
-        for key, val in repoLangs.items():
-            allLangs[key] = allLangs.get(key, 0) + val
-
+def fav_lang(repo):
+    langs = get_repo("languages", owner=repo["owner"]["login"], repo=repo["name"])
     FavLang = ""
     uses = 0
-    for key, val in allLangs.items():
+    for key, val in langs.items():
         if val > uses:
             FavLang = key
             uses = val
@@ -116,7 +109,9 @@ def ryanSync():
     User_info = get_user(user=user)
     User_repos = get_user("/repos", user)
     User_repos.sort(key=lambda x: x["stargazers_count"], reverse=True) #most stargazers come first
-    favLang = fav_lang(User_repos)
+    favlang = "None"
+    if len(User_repos) > 0:
+        favLang = fav_lang(User_repos[0])
     print(User_info)
     print(User_repos)
     # print(res)

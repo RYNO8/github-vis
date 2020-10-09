@@ -40,13 +40,24 @@
         <img src='{{ user_info["avatar_url"] }}', width=100px><br>
     </div>
 </div>
+
 <h3>{{ user_info["login"] }}'s repos:</h3>
-{% for i in res %}
-    <h3><a href='/ronaldsubmit?owner={{ user_info["login"] }}&repo={{ i["name"] }}'>{{ i["name"] }}</a></h3>
-    {% if i["description"] != None %}
-    <p>{{ i["description"] }}</p>
-    {% endif %}
-    {{ i }}<br><br>
+{% for repo in repos %}
+    <div class="row" style="border: 3px solid blueviolet; border-radius: 25px;">
+        <div class="col-lg-4">
+            <h3><a href='/ronaldsubmit?owner={{ user_info["login"] }}&repo={{ repo["name"] }}'>{{ repo["name"] }}</a></h3>
+            {% if repo["description"] != None %}
+                <p>{{ repo["description"] }}</p>
+            {% endif %}
+            <!--{{ repo }}-->
+        </div>
+        <div class="col-lg-4" style="text-align: center">
+            {{ repo["stargazers_count"] }} Stars<br>
+        </div>
+        <div class="col-lg-4" style="text-align: right">
+            <a href='{{ repo["html_url"] }}'>View repo</a>
+        </div>
+    </div>
 {% endfor %}
 
 

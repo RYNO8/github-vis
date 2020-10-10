@@ -1,3 +1,3 @@
 # Github-vis
 
-ONLY EDITS TO FILES IN /FINAL WILL BE RECORDED
+Aaryan? Ronald?

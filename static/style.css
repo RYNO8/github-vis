@@ -1,25 +1,63 @@
-@import url('https://fonts.googleapis.com/css?family=Bebas+Neue&display=swap');
-@import url('https://fonts.googleapis.com/css?family=Rubik&display=swap');
-@import url('https://fonts.google.com/specimen/Open+Sans');
-@import url('https://fonts.google.com/specimen/Roboto');
+@import url('https://fonts.googleapis.com/css2?family=Carme&family=Roboto&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Carme&family=Roboto&display=swap');
 
 :root{
   --navbarheadersize: 30px;
 
-  --primary: rgb(39, 54, 74);
+  --bg-primary-col: rgb(240,240,240);
+  --bg-fourth-col: #FFFFFF;
+  --bg-second-col: #FFFFFF;
+  --bg-third-col: #FCFCFC ;
+  --txt-primary-col: #1E90FF ;
+  --a-hover-col: #1E90FF;
+  --nav-primary-col: #1E90FF;
+  --txt-col: #000000;
 
-  --primary-font: Roboto;
-  --secondary-font: Roboto;
+  /*--bg-primary-col: #121212;*/
+  /*--bg-second-col: #f5f5f5;*/
+  /*--bg-third-col: #393f4d;*/
+  /*--bg-fourth-col: #121212;*/
+  /*--txt-primary-col: #F5F5F5;*/
+  /*--nav-primary-col: #1E90FF;*/
+  /*--a-hover-col: #FF5A09;*/
+  /*--txt-col: #FFFFFF;*/
+
+
+
+
+    --primary-font: 'Carme';
+    --secondary-font: 'Roboto';
 
 }
 
-.navbar, h1, h2, h3, h4, h5, h6, #setting-content-wrapper{
-  font-family: var(--primary-font), "Helvetica Neue" !important;
+ a, h1, h2, h3, h4, h5, h6, #setting-content-wrapper{
+  font-family: var(--primary-font), sans-serif !important;
+  color: var(--txt-primary-col);
+}
+
+
+a:hover{
+  color: var(--a-hover-col);
+}
+
+
+
+p{
+  color: var(--txt-col);
+}
+
+
+.navbar{
+  background: var(--bg-fourth-col);
+}
+
+.navbar a{
+  color: var(--nav-primary-col);
 }
 
 .body p{
     font-size: 15px;
-    font-family: var(--secondary-font), Arial !important;
+    font-family: var(--secondary-font), sans-serif;
 }
 
 .header-size{
@@ -29,7 +67,7 @@
 body{
   padding:0;
   margin:0;
-  background-color: rgb(240,240,240);
+  background-color: var(--bg-primary-col);
   position: absolute;
   width: 100%;
   top: 0px; /* how much you want to shift entire body down */
@@ -49,8 +87,11 @@ a{
 
 }
 
+a:hover{
+  color: #FF5A09 !important;
+}
+
 .navbar{
-  background: #FFF ;
   border-bottom: 1px black solid;
   height: 80px;
 }
@@ -81,6 +122,10 @@ a{
   bottom:0px;
 }
 
+.footer a, .footer p{
+    color: var(--nav-primary-col) ;
+}
+
 .dropdown-align{
   width: 80px;
 }
@@ -106,9 +151,8 @@ table{
 }
 
 
-/* Copy and pasted */
 .dropbtn {
-  background-color: rgba(30, 144, 255, 0.8); /* dodger blue */
+  background-color: var(--nav-primary-col);
   color: white;
   padding: 16px;
   font-size: 16px;
@@ -124,7 +168,7 @@ table{
   display: none;
   position: absolute;
   background-color: #f1f1f1;
-  min-width: 160px;
+  width: 145px;
   box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
   z-index: 1;
 }
@@ -140,6 +184,7 @@ table{
 
 .dropdown:hover .dropdown-content {
   display: block;
+
 }
 
 .dropdown:hover .dropbtn {
@@ -164,12 +209,11 @@ table{
   font-size: inherit;
   padding: 12px 16px;
   display: block;
+  background-color: var(--bg-third-col);
+  color: var(--txt-col);
 
 }
 
-.select-box option{
-  background-color: black;
-}
 
 .body-heading{
   text-align: center;
@@ -179,15 +223,34 @@ table{
   display: flex;
 }
 .body-content-wrapper{
-  background-color: #FCFCFC;
+  background-color: var(--bg-third-col);
   margin: auto;
   margin-top: 10vh;
   padding: 25px;
   width: 50vw !important;
   display: block;
   border-radius: 5px;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
 }
 
 #about-content{
   text-align: center;
+}
+
+#login-info{
+  text-align: center !important;
+}
+
+
+#redirect-signup{
+  color: #1E90FF !important;
+}
+
+#redirect-signup:hover{
+    color: #FF5A09 !important;
+
+}
+
+.flash-content{
+  color: red !important;
 }

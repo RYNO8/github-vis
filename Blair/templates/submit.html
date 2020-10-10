@@ -35,7 +35,7 @@
     <div class="col-lg-8">
         <div style="text-indent: 20px">
             <h2>User Info for {{ user_info["login"] }}:</h2>
-            {% if user_info["bio"] != None %}}
+            {% if user_info["bio"] != None %}
                 <p>Bio: <cite>{{ user_info["bio"] }}</cite></p>
             {% endif %}
             <p>{{ user_info["followers"] }} followers, {{ user_info["following"] }} following</p>

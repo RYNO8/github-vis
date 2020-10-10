@@ -9,12 +9,18 @@
                 <h1 class="body-header"> Sign Up</h1>
             </div>
             <hr>
+            <div id="about-content">
+                <p>Create your GitInfo account</p>
+            </div>
+            <hr>
             <div id="setting-content">
                 {% with messages = get_flashed_messages() %}
                     {% if messages %}
-                        {% for msg in messages %}
-                            <p>{{ msg }}</p>
-                        {% endfor %}
+                        <div id="flash-content">
+                            {% for msg in messages %}
+                                <p>{{ msg }}</p>
+                            {% endfor %}
+                        </div>
                         <hr>
                     {% endif %}
                 {%  endwith %}
@@ -56,29 +62,29 @@
                         </ul>
                     </p>
 
-                    <p>
-                        {{ form.email.label }}
-                        {{ form.email(size=40, placeholder = 'type email here', class='select-box')}}
-                    </p>
-                    <p class="error_p">
-                        <ul>
-                            {% for error in form.email.errors %}
-                                <li style="color:red;" class="error">{{error}}</li>
-                            {% endfor %}
-                        </ul>
-                    </p>
+{#                    <p>#}
+{#                        {{ form.email.label }}#}
+{#                        {{ form.email(size=40, placeholder = 'type email here', class='select-box')}}#}
+{#                    </p>#}
+{#                    <p class="error_p">#}
+{#                        <ul>#}
+{#                            {% for error in form.email.errors %}#}
+{#                                <li style="color:red;" class="error">{{error}}</li>#}
+{#                            {% endfor %}#}
+{#                        </ul>#}
+{#                    </p>#}
 
-                    <p>
-                        {{ form.phone.label }}
-                        {{ form.phone(size=40, placeholder = 'type phone number here', class='select-box')}}
-                    </p>
-                    <p class="error_p">
-                        <ul>
-                            {% for error in form.phone.errors %}
-                                <li style="color:red;" class="error">{{error}}</li>
-                            {% endfor %}
-                        </ul>
-                    </p>
+{#                    <p>#}
+{#                        {{ form.phone.label }}#}
+{#                        {{ form.phone(size=40, placeholder = 'type phone number here', class='select-box')}}#}
+{#                    </p>#}
+{#                    <p class="error_p">#}
+{#                        <ul>#}
+{#                            {% for error in form.phone.errors %}#}
+{#                                <li style="color:red;" class="error">{{error}}</li>#}
+{#                            {% endfor %}#}
+{#                        </ul>#}
+{#                    </p>#}
 
                     <p>
                         {{ form.submit()}}

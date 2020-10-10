@@ -9,12 +9,20 @@
                 <h1 class="body-header"> Log In</h1>
             </div>
             <hr>
+            <div id="login-info">
+                <p>Log In to your GitInfo account</p>
+                <p>Click <a href="/signup" id="redirect-signup">Here</a> to sign up</p>
+            </div>
+            <hr>
+
             <div id="setting-content">
                 {% with messages = get_flashed_messages() %}
                     {% if messages %}
-                        {% for msg in messages %}
-                            <p>{{ msg }}</p>
-                        {% endfor %}
+                        <div id="flash-content">
+                            {% for msg in messages %}
+                                <p>{{ msg }}</p>
+                            {% endfor %}
+                        </div>
                         <hr>
                     {% endif %}
                 {%  endwith %}

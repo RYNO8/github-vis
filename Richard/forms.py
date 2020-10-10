@@ -9,18 +9,18 @@ class SignUpForm(FlaskForm):
     username = StringField('Username', validators=[InputRequired(), Length(min=5, max=15)])
     password = PasswordField('Password', validators=[InputRequired(), Length(min=4,max=80)])
     retypePassword = PasswordField('Retype Password', validators=[InputRequired(), Length(min=4,max=80)])
-    email = StringField('Email', validators=[InputRequired(), Email(message = 'Invalid Email'), Length(max=50)])
-    phone = IntegerField('Phone Number', validators=[InputRequired()])
-    submit = SubmitField('OK')
+    #email = StringField('Email (optional)', validators=[Email(message = 'Invalid Email'), Length(max=50)])
+    #phone = IntegerField('Phone Number', validators=[])
+    submit = SubmitField('Add User')
 
 class LoginForm(FlaskForm):
     username = StringField('Username', validators=[InputRequired(), Length(min=5, max=15)])
     password = PasswordField('Password', validators=[InputRequired(), Length(min=4,max=80)])
-    submit = SubmitField('OK')
+    submit = SubmitField('Log In to Dashboard')
 
 class AuthGitUserForm(FlaskForm):
-    username = StringField('Username', validators = [InputRequired()])
-    submit = SubmitField('OK')
+    username = StringField('Github Username', validators = [InputRequired()])
+    submit = SubmitField('Authenticate User')
 
 
 

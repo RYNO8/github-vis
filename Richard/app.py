@@ -40,17 +40,21 @@ def login_page():
 
 @app.route('/signup', methods = ['GET', 'POST'])
 def signup_page():
+    if 'user' in session: #If user has already logged in, just go to dashboard without logging in again
+        flash('Already logged in')
+        return redirect(url_for('dashboard'))
+
     form = SignUpForm()
     if form.validate_on_submit():
         form_info = request.form
-        username,password,email,phone = form_info['username'], form_info['password'],\
-                                        form_info['email'], form_info['phone']
+        username,password = form_info['username'], form_info['password']
+
 
         retypePassword = form_info['retypePassword']
         if retypePassword != password:
             flash("Password's do not match. Please try again.")
         try:
-            addUser(username, password, email, phone)
+            addUser(username, password)
         except:
             flash("Unique constraint has failed. Please try again.")
             return redirect(url_for('signup_page'))

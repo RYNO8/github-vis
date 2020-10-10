@@ -53,7 +53,8 @@ def createTable(cur):
                 username TEXT NOT NULL UNIQUE,
                 password TEXT NOT NULL,
                 email TEXT NOT NULL UNIQUE,
-                phone TEXT NOT NULL UNIQUE)''')
+                
+                 TEXT NOT NULL UNIQUE)''')
     #id INTEGER not null primary key autoincrement
     #could just be id INTEGER primary key - as integer primary keys default autoincrement
     #when null value is passed in autoincrement, id value is one larger then
@@ -65,10 +66,10 @@ def getData(cur, userId):
     return cur.fetchall()
 
 @establishConnection
-def addUser(cur, username, password, email, phone):
+def addUser(cur, username, password):
     password = getHash(password)
-    cur.execute("INSERT INTO user (username, password, email, phone) VALUES (?, ?, ?, ?)",
-                (username, password, email, phone))
+    cur.execute("INSERT INTO user (username, password) VALUES (?, ?)",
+                (username, password))
 
 @establishConnection
 def deleteUser(cur, userId):

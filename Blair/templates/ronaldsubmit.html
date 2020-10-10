@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "Blair/templates/base.html" %}
 
 {% block pg_title %}Submit{% endblock %}
 
@@ -32,7 +32,7 @@
                 {% for contributor in contributors %}
                 <tr>
                     <td><img src='{{ contributor["avatar_url"] }}' width=20px style="border-radius: 5px"></td>
-                    <td><a href='/ryansubmit?user={{ contributor["login"] }}'>{{ contributor["login"] }}</a></td>
+                    <td><a href='/user_graph?user={{ contributor["login"] }}'>{{ contributor["login"] }}</a></td>
                     <td>{{ contributor["contributions"] }}</td>
                     <td>{{ '%0.2f'| format(contributor["contributions"] * 100 / total | float) }}%</td>
                 </tr>
@@ -43,21 +43,21 @@
     <div class="col-lg-6">
         <head>
             <link
-                href='https://cdnjs.cloudflare.com/ajax/libs/bokeh/2.0.2/bokeh.min.css'
+                href='https://cdnjs.cloudflare.com/ajax/libs/bokeh/1.0.4/bokeh.min.css'
                 rel="stylesheet" type="text/css">
             <link
-                href='https://cdnjs.cloudflare.com/ajax/libs/bokeh/2.0.2/bokeh-widgets.css'
+                href='https://cdnjs.cloudflare.com/ajax/libs/bokeh/1.0.4/bokeh-widgets.css'
                 rel="stylesheet" type="text/css">
             <link
-                href='https://cdnjs.cloudflare.com/ajax/libs/bokeh/2.0.2/bokeh-tables.css'
+                href='https://cdnjs.cloudflare.com/ajax/libs/bokeh/1.0.4/bokeh-tables.css'
                 rel="stylesheet" type="text/css">
         </head>
         <body>
             {{ pi_div | safe }}
             {{ pi_script | safe }}
         </body>
-        <script src='https://cdnjs.cloudflare.com/ajax/libs/bokeh/2.0.2/bokeh.min.js'></script>
-        <script src='https://cdnjs.cloudflare.com/ajax/libs/bokeh/2.0.2/bokeh-widgets.js'></script>
-        <script src='https://cdnjs.cloudflare.com/ajax/libs/bokeh/2.0.2/bokeh-tables.js'></script>
+        <script src='https://cdnjs.cloudflare.com/ajax/libs/bokeh/1.0.4/bokeh.min.js'></script>
+        <script src='https://cdnjs.cloudflare.com/ajax/libs/bokeh/1.0.4/bokeh-widgets.js'></script>
+        <script src='https://cdnjs.cloudflare.com/ajax/libs/bokeh/1.0.4/bokeh-tables.js'></script>
     </div>
 {% endblock %}

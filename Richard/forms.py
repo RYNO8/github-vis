@@ -30,3 +30,7 @@ class UserSettingsForm(FlaskForm):
     colourTheme = SelectField('Colour Theme', choices=colourThemeChoices, default=default[0])
     submit = SubmitField('UPDATE')
 
+class RedirectUserForm(FlaskForm):
+    username = StringField("Enter any GITHUB username", validators = [InputRequired()])
+    submit = SubmitField('View User')
+

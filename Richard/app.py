@@ -4,7 +4,7 @@ from flask import Flask, render_template, request, url_for,redirect, flash, sess
 import requests, pickle
 from github import Github, NamedUser
 
-from .forms import LoginForm, SignUpForm, AuthGitUserForm, UserSettingsForm
+from .forms import LoginForm, SignUpForm, AuthGitUserForm, UserSettingsForm, RedirectUserForm
 from .data_processing import *
 
 
@@ -81,7 +81,13 @@ def dashboard():
             url = get_url(gitUsername) #url is the link to GITHUB authentication portal
             return redirect(url) #redirects user to GITHUB authentication portal
         return render_template('Richard/templates/unauthdashboard.html', form=form)
-    return render_template('Richard/templates/dashboard.html', session=session)
+
+    form = RedirectUserForm()
+    if form.validate_on_submit():
+        form_info = request.form
+        username = form_info['username']
+        return redirect("/users?user={}".format(username))
+    return render_template('Richard/templates/dashboard.html', session=session, form=form)
     #TODO: setup a nice dashboard
 
 @app.route('/authoriseUser')

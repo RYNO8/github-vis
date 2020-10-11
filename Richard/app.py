@@ -17,6 +17,9 @@ state = 'JSXnC7wwRDpekr6pndyt6qDKxnvbnrvj96xDzhSUrUm7L7kAbjBGe6PwG2tZHVxSQ5m7Lu'
 def home():
     return render_template('Richard/templates/home.html')
 
+@app.route("/search") #RYAN added this
+def search():
+    return render_template("Richard/templates/search.html", user=request.args["user"])
 
 @app.route('/login', methods = ['GET', 'POST'])
 def login_page():

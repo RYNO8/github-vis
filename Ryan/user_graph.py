@@ -39,6 +39,7 @@ def favLanguage(user):
 def bfs(user):
     """https://en.wikipedia.org/wiki/Breadth-first_search"""
     """NOTE: it would tend to explore friends with more followers"""
+    all_languages = []
     user.language = favLanguage(user)
     
     # queue
@@ -95,13 +96,16 @@ POST /graph {"user": "RYNO8"}"""
     # cache previous graphs during development / debugging
     try: 
         allUsers, edges = pickle.load(open(f"Ryan\\user_graph_cache\\{user}", "rb"))
+        all_languages = set()
+        for user in allUsers:
+            all_languages.add(user.language)
     except FileNotFoundError:
         allUsers, edges = bfs(g.get_user(user))
         pickle.dump((allUsers, edges), open(f"Ryan\\user_graph_cache\\{user}", "wb"))
     
     return render_template(
         "Ryan/templates/user_graph.html",
-        nodeLabels=all_languages,
+        nodeLabels=list(all_languages),
         nodes=", ".join([f"""{{
             id: {i},
             label: '{user.login}',

@@ -1,0 +1,43 @@
+{%  extends 'Richard/templates/dashboardBase.html' %}
+
+{%  block page_title %} Dashboard {%  endblock %}
+{% block page_content %}
+	<style>
+.click-box {
+	padding: 50px;
+	margin: 20px;
+	width: 550px;
+	height: 600px;
+	border: 5px solid black;
+}
+.go-button {
+	bottom: 180px;
+    position: absolute;
+	background-color: var(--nav-primary-col);
+    border: none;
+    color: white;
+    padding: 15px 32px;
+	transform: translate(-50%); // make up difference from padding shift
+}
+	</style>
+	<h1>Results for user: <b>{{ user }}</b></h1>
+	<table style="margin: auto">
+		<tr>
+			<td><div class="click-box">
+				<h2>View details about the user</h2>
+				<br><br><br><img src="static/user_details.png" width=300px><br><br>
+				<a class="go-button" href="/users?user={{user}}">GO</a>
+			</div></td>
+			<td><div class="click-box">
+				<h2>View a graph of the user and followers / followings</h2>
+				<br><img src="static/user_graph.png" width=300px><br><br>
+				<a class="go-button" href="/user_graph?user={{user}}">GO</a>
+			</div></td>
+			<td><div class="click-box">
+				<h2>View details about the users repos</h2>
+				<br><img src="static/repo_graph.png" width=300px><br><br>
+				<a class="go-button" href="/repo_graph?user={{user}}">GO</a>
+			</div></td>
+		</tr>
+	</table>
+{%  endblock %}

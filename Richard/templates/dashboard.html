@@ -20,7 +20,6 @@
   color: #9DBFAF;
 }
 
-<<<<<<< HEAD
 
 .searchButton {
   width: 40px;
@@ -45,7 +44,7 @@ input[type=text]:focus {
   width: 450px;
 }*/
 </style>
-    <h1>Dashboard</h1>
+	<h1>Dashboard</h1>
     <p>Hello {{ session["user"] }}</p>
 	<div style="text-align: center">
 		<div class="search">
@@ -65,8 +64,7 @@ input[type=text]:focus {
 		</div>
 	
 	</div>
-=======
-    <section id="showcase">
+	<section id="showcase">
         <div id="dashboard-form">
             <button type="button" id="showcase-button" class="btn btn-info" data-toggle="collapse" data-target="#info">View Other User Repos</button>
             <div id="info" class="collapse">
@@ -94,11 +92,6 @@ input[type=text]:focus {
         </div>
 
     </section>
+    
 
-    </div>
-    <p>Dashboard</p>
-    <p>Welcome to your dashboard</p>
-    <p>Access token: {{ session['access_token'] }}</p>
-    <li><a href="{{url_for('logout')}}">Log Out</a></li>
->>>>>>> 287d5f062f0745c96b716abcd510fe9bf6b9e7fc
 {%  endblock %}

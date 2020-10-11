@@ -71,7 +71,7 @@ def badUser(user):
 def ryanSync():
     user = request.args.get("user", "RYNO8")
     print(user)
-    User_info = get_user(user=user)
+    User_info = get_user(url="", user=user)
     if User_info.get("message", False):
         print(User_info["message"])
         return badUser(user)

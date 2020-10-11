@@ -1,3 +1,0 @@
-# Github-vis
-
-Aaryan? Ronald?

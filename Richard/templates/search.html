@@ -1,4 +1,4 @@
-{%  extends 'Richard/templates/dashboardBase.html' %}
+{%  extends 'dashboardBase.html' %}
 
 {%  block page_title %} Dashboard {%  endblock %}
 {% block page_content %}
@@ -6,8 +6,8 @@
 .click-box {
 	padding: 50px;
 	margin: 20px;
-	width: 550px;
-	height: 600px;
+	width: 400px;
+	height: 500px;
 	border: 5px solid black;
 }
 .go-button {
@@ -25,18 +25,20 @@
 		<tr>
 			<td><div class="click-box">
 				<h2>View details about the user</h2>
-				<br><br><br><img src="static/user_details.png" width=300px><br><br>
-				<a class="go-button" href="/users?user={{user}}">GO</a>
+				<br><br><br><img src="static/user_details.png" width=180px><br><br>
+				<a class="go-button" href="/users?user={{user}}" target="_blank">GO</a>
 			</div></td>
 			<td><div class="click-box">
 				<h2>View a graph of the user and followers / followings</h2>
-				<br><img src="static/user_graph.png" width=300px><br><br>
-				<a class="go-button" href="/user_graph?user={{user}}">GO</a>
+				<i>* may take up to 10 seconds to load</i>
+				<br><img src="static/user_graph.png" width=180px><br><br>
+				<a class="go-button" href="/user_graph?user={{user}}" target="_blank">GO</a>
 			</div></td>
 			<td><div class="click-box">
 				<h2>View details about the users repos</h2>
-				<br><img src="static/repo_graph.png" width=300px><br><br>
-				<a class="go-button" href="/repo_graph?user={{user}}">GO</a>
+				<i>* may take up to 10 seconds to load</i>
+				<br><img src="static/repo_graph.png" width=180px><br><br>
+				<a class="go-button" href="/repo_graph?user={{user}}" target="_blank">GO</a>
 			</div></td>
 		</tr>
 	</table>

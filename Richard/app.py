@@ -15,6 +15,8 @@ state = 'JSXnC7wwRDpekr6pndyt6qDKxnvbnrvj96xDzhSUrUm7L7kAbjBGe6PwG2tZHVxSQ5m7Lu'
 
 @app.route('/')
 def home():
+    if "access_token" in session:
+        return redirect("/dashboard")
     return render_template('Richard/templates/home.html')
 
 @app.route("/search") #RYAN added this
@@ -125,9 +127,6 @@ def settings():
 
 @app.route("/about")
 def about():
-    if 'user' not in session:
-        return redirect(url_for('home'))
-
     return render_template('Richard/templates/about.html')
 
 @app.route("/logout")

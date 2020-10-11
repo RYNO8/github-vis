@@ -58,11 +58,12 @@ body {
 .modal-header {
   padding: 2px 16px;
   background-color: var(--nav-primary-col);
-  color: white;
+  color: var(--bg-second-col);
 }
 
 .modal-body {
   padding: 2px 16px;
+  background-color: var(--bg-primary-col);
 }
 
 .modal-footer {

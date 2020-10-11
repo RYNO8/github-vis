@@ -64,7 +64,7 @@ def fav_lang(repos):
 
 
 def badUser(user):
-    return render_template("badSearch.html", type="user", name=user)
+    return render_template("Blair/templates/badSearch.html", type="user", name=user)
 
 
 @app.route("/users", methods=["GET"])
@@ -128,7 +128,7 @@ def pi_chart(result): #ronalds part
 
 
 def badRepo(repo):
-    return render_template("badSearch.html", type="repo", name=repo)
+    return render_template("Blair/templates/badSearch.html", type="repo", name=repo)
 
 
 @app.route("/ronaldsubmit", methods=["GET"])

@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "dashboardBase.html" %}
 
 {% block page_title %}Repository-based User Visualisation{% endblock %}
 
@@ -13,6 +13,7 @@
 
 {% block page_content %}
 	<div>Double click on a node to be redirected to the corresponding repo or user visualisation.</div>
+	<hr>
 	<div id="mynetwork" style="width: 100%; height: 100%;"></div>
 
 	<!-- The Modal -->
@@ -90,9 +91,11 @@
 		
 		network.on("doubleClick", function(properties) {
 			if (properties.nodes.length == 0) { return; }
-			let name = allNodes[properties.nodes[0]].label;
-			if (properties.nodes[0] >= BUFFER) { // repo
-				document.getElementById("modal-link").href= "/repos?repo=" + name;
+			let node = properties.nodes[0];
+			let name = allNodes[node].label;
+			if (node >= BUFFER) { // repo
+				var owner = network.getConnectedNodes(node)[0];
+				document.getElementById("modal-link").href= "/ronaldsubmit?owner=" + allNodes[owner].label + "&repo=" + name;
 				//document.getElementById("modal-link").href= "https://github.com/" + name;
 				document.getElementById("modal-link").text= "Visit the profile of " + name;
 			}

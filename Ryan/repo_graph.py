@@ -43,14 +43,14 @@ def bfs(authUser, user=None, repo=None):
         elif isinstance(curr, Repository.Repository):
             for child in list(curr.get_contributors()):
                 if not child in allUsers:
+                    child.bio #retrieves bio data, so it can be pickled
                     todo.append(child)
                     allUsers.append(child)
                 edges.add((allUsers.index(child), BUFFER + allRepos.index(curr)))
                 
         else:
             raise Exception
-        
-    [user.bio for user in allUsers] #retrieves bio data, so it can be pickled
+    
     return allUsers, allRepos, edges
 
 def sanitise(text):
@@ -108,7 +108,6 @@ POST /repo_graph {"repo": "chartjs/Chart.js"}"""
             id: {i},
             label: '{repo.name}',
             value: 1,
-            title: 'TODO: tooltip text',
         }}""" for i, repo in enumerate(allRepos, start=BUFFER)]),
         edges=", ".join([f"{{ from: {i[0]}, to: {i[1]} }}" for i in edges])
     )

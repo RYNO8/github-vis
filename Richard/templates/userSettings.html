@@ -1,4 +1,4 @@
-{% extends 'Richard/templates/dashboardBase.html' %}
+{% extends 'dashboardBase.html' %}
 {% block page_title %} User Settings {%  endblock %}
 
 {% block page_content %}
@@ -20,8 +20,8 @@
             <form action="" method="post" id="form" novalidate>
                 {{ form.hidden_tag() }}
                 <div id="settings-select1">
-                    {{ form.colourTheme.label}}
-                    {{ form.colourTheme(class_="select-box")}}
+                    {{ form.colourTheme.label }}
+                    {{ form.colourTheme(class="select-box")}}
                 </div>
                 <p class="error_p">
                     <ul>

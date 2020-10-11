@@ -6,24 +6,21 @@ import string
 import time
 import requests
 
-all_languages = []
 def getx(self): return self._x
-def setx(self, value):
-    self._x = value
-    if value not in all_languages:
-        all_languages.append(value)
+def setx(self, value): self._x = value
 def delx(self): del self._x
 NamedUser.NamedUser._x = None    
 NamedUser.NamedUser.language = property(getx, setx, delx, "Users favourite language")
 HEADERS = {"Accept": "application/vnd.github.v3+json", "Authorization": "token c1b45bdfa9efd656883a4b936de140261e94f8c1"}
 
 g = Github("test-user1337", "cyrilhas2iq")
-MAX_TIME = 10 # bfs() will take <= 5 seconds
+MAX_TIME = 5 # bfs() will take <= 5 seconds
 
 def favLanguage(user):
+    return "A" #stub
     if not isinstance(user, str):
         user = user.login
-    print(user)
+    print("getting language for", user)
     langs = {}
     repos = requests.get(f"https://api.github.com/users/{user}/repos", headers=HEADERS)
     for repo in repos.json():
@@ -39,7 +36,6 @@ def favLanguage(user):
 def bfs(user):
     """https://en.wikipedia.org/wiki/Breadth-first_search"""
     """NOTE: it would tend to explore friends with more followers"""
-    all_languages = []
     user.language = favLanguage(user)
     
     # queue
@@ -51,15 +47,17 @@ def bfs(user):
     start = time.time()
     while todo and time.time() - start < MAX_TIME:
         curr = todo.pop(0)
-        print("Exploring:", curr)
+        print("Exploring:", curr, time.time() - start)
         
         for child in list(curr.get_followers()):
             if not child in allUsers:
-                #child.language = favLanguage(child)
+                child.bio #retrieves bio data, so it can be pickled
+                child.language = favLanguage(child)
+                assert child not in allUsers
                 todo.append(child)
                 allUsers.append(child)
             edges.append((allUsers.index(curr), allUsers.index(child)))
-
+    
     # find bidrectional edges. if a->b and b->a, a<->b
     edgeDirection = []
     while edges:
@@ -69,10 +67,7 @@ def bfs(user):
             edgeDirection.append((*curr, "to, from"))
         else: # edge is not bidirectional
             edgeDirection.append((*curr, "to"))
-            
-    for user in allUsers:
-        user.bio #retrieves bio data, so it can be pickled
-        user.language = favLanguage(user)
+    
     return allUsers, edgeDirection
 
 def sanitise(text):
@@ -96,13 +91,14 @@ POST /graph {"user": "RYNO8"}"""
     # cache previous graphs during development / debugging
     try: 
         allUsers, edges = pickle.load(open(f"Ryan\\user_graph_cache\\{user}", "rb"))
-        all_languages = set()
-        for user in allUsers:
-            all_languages.add(user.language)
+        
     except FileNotFoundError:
         allUsers, edges = bfs(g.get_user(user))
         pickle.dump((allUsers, edges), open(f"Ryan\\user_graph_cache\\{user}", "wb"))
-    
+        
+    all_languages = set()
+    for user in allUsers:
+        all_languages.add(user.language)
     return render_template(
         "Ryan/templates/user_graph.html",
         nodeLabels=list(all_languages),

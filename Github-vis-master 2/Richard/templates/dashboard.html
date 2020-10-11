@@ -1,0 +1,47 @@
+{%  extends 'Richard/templates/dashboardBase.html' %}
+
+{%  block page_title %} Dashboard {%  endblock %}
+{% block page_content %}
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            {% for msg in messages %}
+                <p class="flash-content">{{ msg }}</p>
+            {% endfor %}
+        {% endif %}
+    {%  endwith %}
+
+    <section id="showcase">
+        <div id="dashboard-form">
+            <button type="button" id="showcase-button" class="btn btn-info" data-toggle="collapse" data-target="#info">View Other User Repos</button>
+            <div id="info" class="collapse">
+                <br>
+                <form action="" method="post" id="form" novalidate>
+                    {{ form.hidden_tag() }}
+                    <p>
+                        {{ form.username.label }}
+                        {{ form.username(size=40, placeholder = '', class='select-box')}}
+                    </p>
+                    <p class="error_p">
+                        <ul>
+                            {% for error in form.username.errors %}
+                                <li style="color:red;" class="error">{{error}}</li>
+                            {% endfor %}
+                        </ul>
+                    </p>
+
+                    <p>
+                        {{ form.submit()}}
+                    </p>
+
+                </form>
+            </div>
+        </div>
+
+    </section>
+
+    </div>
+    <p>Dashboard</p>
+    <p>Welcome to your dashboard</p>
+    <p>Access token: {{ session['access_token'] }}</p>
+    <li><a href="{{url_for('logout')}}">Log Out</a></li>
+{%  endblock %}

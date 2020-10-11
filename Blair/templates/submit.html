@@ -9,33 +9,6 @@
 
 
         <div class="row user-headers">
-
-                    <!--<h1>Repo: {{ repo }}</h1>-->
-
-            <!--<h2>Commits</h2>-->
-            <!--{% for commit in commits %}-->
-            <!--    {{ commit["author"]["login"] }}<br>-->
-            <!--    {{ commit["commit"]["author"]["date"] }}<br>-->
-            <!--    {{ commit["commit"]["message"] }}<br><br>-->
-            <!--{% endfor %}-->
-            <!--<br>-->
-            <!--<h2>Languages used:</h2>-->
-            <!--{% for i in lang %}-->
-            <!--    {{ i }}: {{ lang[i] }} bytes<br>-->
-            <!--{% endfor %}-->
-
-            <!--<h2>Contributors:</h2>-->
-            <!--{% for i in cont %}-->
-            <!--    <h3>Details for {{ i["login"] }}:</h3>-->
-            <!--    <div class="row" style="text-indent: 20px">-->
-            <!--        <h4>Number of Contributions: {{ i["contributions"] }}</h4>-->
-            <!--        <div style="text-align: right">-->
-            <!--            <img src='{{ i["avatar_url"] }}', width=100px><br>-->
-            <!--        </div>-->
-            <!--    </div>-->
-            <!--    {{ i }}<br><br><br>-->
-            <!--{% endfor %}-->
-
             <div class="user-header">
                 <h2>User Info for {{ user_info["login"] }}:</h2>
                 {% if user_info["bio"] != None %}
@@ -67,7 +40,7 @@
                         Primary Language: {{ repo["language"] }}
                     </div>
                     <div class="col-lg-4" style="text-align: right">
-                        <a target="_blank" href='{{ repo["html_url"] }}'>View repo</a>
+                        <a target="_blank" href='{{ repo["html_url"] }}'>View repo in Github</a>
                     </div>
                 </div>
                 <br>
@@ -76,8 +49,4 @@
 
     </div>
 
-
-
 {% endblock %}
-
-

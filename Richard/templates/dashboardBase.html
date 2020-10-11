@@ -1,4 +1,4 @@
-{% extends 'Richard/templates/base.html' %}
+{% extends 'base.html' %}
 
 {% block title %}
     {% block page_title %}{% endblock %} - GitInfo
@@ -24,7 +24,6 @@
                     </button>
                     <div class="dropdown-content">
                         <a href="/settings">User Settings</a>
-                        <a href="/about">About</a>
                         <a href="{{ url_for('logout') }}" id="logout-button">Logout</a>
                     </div>
                 </div>

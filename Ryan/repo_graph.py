@@ -50,7 +50,7 @@ def bfs(user=None, repo=None):
     return allUsers, allRepos, edges
 
 def sanitise(text):
-    return text.replace("'", "\\'").replace("\r\n", "<br>")
+    return text.replace("'", "\\'").replace("\r\n", "<br>").replace("\n", "<br>")
 
 @app.route("/repo_graph", methods=["GET", "POST"])
 def repo_graph():
@@ -69,7 +69,7 @@ POST /repo_graph {"repo": "chartjs/Chart.js"}"""
         user = request.form.get("user", user)
         repo = request.form.get("repo", repo)
     if (user == None) == (repo == None): #if (both user / repo) OR (neither user / repo)
-        return sanitise("invalid\n" + repo_graph.__doc__)
+        return sanitise("invalid " + repo_graph.__doc__)
 
     try: # cache previous graphs during development / debugging
         if user:

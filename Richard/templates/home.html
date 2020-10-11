@@ -1,10 +1,12 @@
-{%  extends 'Richard/templates/base.html' %}
+{% extends 'base.html' %}
 
-{%  block page_title %} Home {%  endblock %}
+{% block page_title %}Home{% endblock %}
 
 {% block page_content %}
-<p>Hello</p>
-<p>Hello</p>
-{%  endblock %}
+<p>Welcome to GitInfo, a website to help you visualise Github users and repos (TODO: make text better)</p>
+<p>Search for a user (redirect to /users?user=... or /user_graph?user=... or /repo_graph?user=...</p>
+<p>OR</p>
+<p>Search for a repo (redirect to /repo?repo=... or ronaldsubmit?owner=...&repo=...)</p>
+{% endblock %}
 
 

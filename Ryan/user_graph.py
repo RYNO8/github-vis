@@ -4,21 +4,42 @@ from github import Github, NamedUser
 import pickle
 import string
 import time
+import requests
+
+all_languages = []
+def getx(self): return self._x
+def setx(self, value):
+    self._x = value
+    if value not in all_languages:
+        all_languages.append(value)
+def delx(self): del self._x
+NamedUser.NamedUser._x = None    
+NamedUser.NamedUser.language = property(getx, setx, delx, "Users favourite language")
+HEADERS = {"Accept": "application/vnd.github.v3+json", "Authorization": "token c1b45bdfa9efd656883a4b936de140261e94f8c1"}
 
 g = Github("test-user1337", "cyrilhas2iq")
-MAX_TIME = 5 # bfs() will take <= 5 seconds
+MAX_TIME = 10 # bfs() will take <= 5 seconds
 
 def favLanguage(user):
-    if isinstance(user, NamedUser.NamedUser):
-        return user.login[0].title()
-    elif isinstance(user, str):
-        return user[0].title()
-    else:
-        raise
-        
+    if not isinstance(user, str):
+        user = user.login
+    print(user)
+    langs = {}
+    repos = requests.get(f"https://api.github.com/users/{user}/repos", headers=HEADERS)
+    for repo in repos.json():
+        langs[repo["language"]] = langs.get(repo["language"], 0) + 1
+    if None in langs: del langs[None]
+    
+    # find most frequent language
+    for language, freq in langs.items():
+        if freq == max(langs.values()):
+            return language
+    return "None" # as a string for consistancy
+
 def bfs(user):
     """https://en.wikipedia.org/wiki/Breadth-first_search"""
     """NOTE: it would tend to explore friends with more followers"""
+    user.language = favLanguage(user)
     
     # queue
     todo = [user] # list of user objects
@@ -33,6 +54,7 @@ def bfs(user):
         
         for child in list(curr.get_followers()):
             if not child in allUsers:
+                #child.language = favLanguage(child)
                 todo.append(child)
                 allUsers.append(child)
             edges.append((allUsers.index(curr), allUsers.index(child)))
@@ -47,11 +69,13 @@ def bfs(user):
         else: # edge is not bidirectional
             edgeDirection.append((*curr, "to"))
             
-    [user.bio for user in allUsers] #retrieves bio data, so it can be pickled
+    for user in allUsers:
+        user.bio #retrieves bio data, so it can be pickled
+        user.language = favLanguage(user)
     return allUsers, edgeDirection
 
 def sanitise(text):
-    return text.replace("'", "\\'").replace("\r\n", "<br>")
+    return text.replace("'", "\\'").replace("\r\n", "<br>").replace("\n", "<br>")
 
 @app.route("/user_graph", methods=["GET", "POST"])
 def user_graph():
@@ -77,12 +101,12 @@ POST /graph {"user": "RYNO8"}"""
     
     return render_template(
         "Ryan/templates/user_graph.html",
-        nodeLabels=list(string.ascii_uppercase), #TODO: fix
+        nodeLabels=all_languages,
         nodes=", ".join([f"""{{
             id: {i},
             label: '{user.login}',
             value: {sum(i in edge for edge in edges)**1.3},
-            lang: '{favLanguage(user)}',
+            lang: '{user.language}',
             shape: 'circularImage',
             image: '{user.avatar_url}',
             {"title: '" + sanitise(user.bio) + "'," if user.bio else ""}

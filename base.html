@@ -1,12 +1,13 @@
 {% extends 'bootstrap/base.html' %}
 
 {% block title %}
-    {% block page_title %}{% endblock %} - GITHUB
+    {% block page_title %}{% endblock %} - GitInfo
 {% endblock %}
 
 {% block styles %}
 {{super()}}
 <link rel="stylesheet" href="{{url_for('static', filename='style.css')}}">
+{% block head_content %}{% endblock %}
 {% endblock %}
 
 
@@ -14,31 +15,41 @@
     <nav class="navbar navbar-default navbar-fixed-top">
         <div class="container-fluid">
             <div class="navbar-header">
-                <a class="navbar-brand header-size" href="/">Github <span><img src="/static/logo.png" class="logo-size"></span></a>
+                <a class="navbar-brand header-size" href="/">GitInfo <span><img src="/static/logo.png" class="logo-size"></span></a>
             </div>
 
             <div class="navbar-links">
                 <ul class="nav">
                     <li><a href="/">Home</a></li>
+					<li><a href="/about">About</a></li>
                     <li><a href = "/login" target = "">Log In</a></li>
                     <li><a href="/signup" target="">Sign Up</a></li>
+					<li class="theme-switch">
+						<div class="toggle-box">
+							<input type="checkbox" name="checkbox1" id="toggle-box-checkbox">
+							<label for="toggle-box-checkbox" class="toggle-box-label-left"></label>
+							<label for="toggle-box-checkbox" class="toggle-box-label"></label>
+						</div>
+					</li>
                 </ul>
             </div>
-
         </div>
     </nav>
 {% endblock %}
 
 {% block content %}
     <body>
-        <div class="container-fluid body-content">
+        <div class="container-fluid body-content" style="padding: 50px">
             {% block page_content %}{% endblock %}
         </div>
 
         <div class="container-fluid footer">
             <hr>
-            <p class="panel-footer footer-text"> Nice<a href="#" class="footer-right">Back to Top</a></p>
+            <p class="panel-footer footer-text"> GitInfo Website<a href="#" class="footer-right">Back to Top</a></p>
         </div>
+		
+		
+		<script src="{{url_for('static', filename='themetoggle.js')}}"></script>
     </body>
 
 {% endblock %}

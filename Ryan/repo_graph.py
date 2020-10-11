@@ -1,15 +1,14 @@
 from flask import current_app as app
-from flask import request, render_template
+from flask import request, render_template, session
 from github import Github, NamedUser, Repository
 import pickle
 import string
 import time
 
-g = Github("test-user1337", "cyrilhas2iq")
 MAX_TIME = 5 # bfs() will take <= 5 seconds
 BUFFER = 1000
 
-def bfs(user=None, repo=None):
+def bfs(authUser, user=None, repo=None):
     """https://en.wikipedia.org/wiki/Breadth-first_search"""
     """NOTE: it would tend to explore friends with more followers"""
     
@@ -30,7 +29,12 @@ def bfs(user=None, repo=None):
         print("Exploring:", curr)
         
         if isinstance(curr, NamedUser.NamedUser):
-            for child in list(curr.get_repos()):
+            if curr.login == authUser.login:
+                repos = authUser.get_repos()
+            else:
+                repos = curr.get_repos()
+                
+            for child in list(repos):
                 if not child in allRepos:
                     todo.append(child)
                     allRepos.append(child)
@@ -71,6 +75,12 @@ POST /repo_graph {"repo": "chartjs/Chart.js"}"""
     if (user == None) == (repo == None): #if (both user / repo) OR (neither user / repo)
         return sanitise("invalid " + repo_graph.__doc__)
 
+    print(repr(session["access_token"]))
+    if session["access_token"]:
+        g = Github(session["access_token"])
+    else:
+        g = Github("test-user1337", "cyrilhas2iq")
+
     try: # cache previous graphs during development / debugging
         if user:
             allUsers, allRepos, edges = pickle.load(open(f"Ryan\\repo_graph_cache\\{user}", "rb"))
@@ -78,10 +88,10 @@ POST /repo_graph {"repo": "chartjs/Chart.js"}"""
             allUsers, allRepos, edges = pickle.load(open(f"Ryan\\repo_graph_cache\\{repo.replace('/', '+')}", "rb"))
     except FileNotFoundError:
         if user:
-            allUsers, allRepos, edges = bfs(user=g.get_user(user))
+            allUsers, allRepos, edges = bfs(g.get_user(), user=g.get_user(user))
             pickle.dump((allUsers, allRepos, edges), open(f"Ryan\\repo_graph_cache\\{user}", "wb"))
         else:
-            allUsers, allRepos, edges = bfs(repo=g.get_repo(repo))
+            allUsers, allRepos, edges = bfs(g.get_user(), repo=g.get_repo(repo))
             pickle.dump((allUsers, allRepos, edges), open(f"Ryan\\repo_graph_cache\\{repo.replace('/', '+')}", "wb"))
     
     return render_template(

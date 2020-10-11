@@ -144,7 +144,7 @@ def ronaldSync():
     conts = [contributor["contributions"] for contributor in contributors]
     total = sum(conts)
     pi_script, pi_div = pi_chart(languages)
-    return render_template("Blair/templates/ronaldsubmit.html", pi_script=pi_script, pi_div=pi_div, contributors=contributors, total=total)
+    return render_template("Blair/templates/ronaldsubmit.html", pi_script=pi_script, pi_div=pi_div, contributors=contributors, total=total, owner=Owner, repo=Repo)
 
 if __name__ == "__main__":
     raise Exception("Don't run this file on its own. run main.py from the root directory")

@@ -28,7 +28,7 @@
   background: #00B4CC;
   text-align: center;
   cursor: pointer;
-  color: #fff;
+  color: var(--nav-primary-col);
   font-size: 20px;
 }
 .searchButton:hover{
@@ -46,25 +46,7 @@ input[type=text]:focus {
 </style>
 	<h1>Dashboard</h1>
     <p>Hello {{ session["user"] }}</p>
-	<div style="text-align: center">
-		<div class="search">
-			<form class="wrap" action="search">
-				<input type="text" name="user" class="searchTerm" placeholder="What user do you want to search for?">
-				<button type="submit" class="searchButton">
-					<i class="fa fa-search"></i>
-				</button>
-			</form>
-			<h1>OR</h1>
-			<form class="wrap" action="search">
-				<input type="text" class="searchTerm" placeholder="What are you looking for?">
-				<button type="submit" class="searchButton">
-					<i class="fa fa-search"></i>
-				</button>
-			</form>
-		</div>
-	
-	</div>
-	<section id="showcase">
+	<section id="showcase" style="width: 100%; background: rgb(240, 240, 240);">
         <div id="dashboard-form">
             <button type="button" id="showcase-button" class="btn btn-info" data-toggle="collapse" data-target="#info">View Other User Repos</button>
             <div id="info" class="collapse">
@@ -83,9 +65,7 @@ input[type=text]:focus {
                         </ul>
                     </p>
 
-                    <p>
-                        {{ form.submit()}}
-                    </p>
+                    {{ form.submit()}}
 
                 </form>
             </div>

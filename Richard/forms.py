@@ -31,6 +31,6 @@ class UserSettingsForm(FlaskForm):
     submit = SubmitField('UPDATE')
 
 class RedirectUserForm(FlaskForm):
-    username = StringField("Enter any GITHUB username", validators = [InputRequired()])
+    username = StringField("Enter a Github username", validators = [InputRequired()])
     submit = SubmitField('View User')
 

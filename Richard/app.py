@@ -89,9 +89,8 @@ def dashboard():
     if form.validate_on_submit():
         form_info = request.form
         username = form_info['username']
-        return redirect("/users?user={}".format(username))
+        return redirect("/search?user={}".format(username))
     return render_template('Richard/templates/dashboard.html', session=session, form=form)
-    #TODO: setup a nice dashboard
 
 @app.route('/authoriseUser')
 def authorise():

@@ -33,6 +33,7 @@
  a, h1, h2, h3, h4, h5, h6, #setting-content-wrapper{
   font-family: var(--primary-font), sans-serif !important;
   color: var(--txt-primary-col);
+<<<<<<< HEAD
 }
 
 
@@ -51,6 +52,26 @@ p{
   background: var(--bg-fourth-col);
 }
 
+=======
+}
+
+
+a:hover{
+  color: var(--a-hover-col);
+}
+
+
+
+p{
+  color: var(--txt-col);
+}
+
+
+.navbar{
+  background: var(--bg-fourth-col);
+}
+
+>>>>>>> 67cce7e5469a2cec79953974d58530a638ff1a4b
 .navbar a{
   color: var(--nav-primary-col);
 }
@@ -253,6 +274,7 @@ table{
 
 .flash-content{
   color: red !important;
+<<<<<<< HEAD
 }
 
 /* RYAN: begin toggle theme styles */
@@ -317,3 +339,6 @@ table{
     cursor: pointer;
     color: hsla(0,0%,58.4%,.51);
 }
+=======
+}
+>>>>>>> 67cce7e5469a2cec79953974d58530a638ff1a4b

@@ -20,7 +20,7 @@
                     {% if messages %}
                         <div id="flash-content">
                             {% for msg in messages %}
-                                <p>{{ msg }}</p>
+                                <p>{{ msg(class='flash-content')}}</p>
                             {% endfor %}
                         </div>
                         <hr>

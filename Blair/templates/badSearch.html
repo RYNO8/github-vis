@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+
+{% block pg_title %}{{ type }} not found{% endblock %}
+
+{% block pg_content %}
+The {{ type }} "{{ name }}" could not be found.<br>
+(include a resubmit/ back button here?)
+<!--<button onclick="history.back()" style="">Return to Previous Page</button><br>-->
+<!--this button take the user to prev pg, uncomment if u want-->
+{% endblock %}

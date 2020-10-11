@@ -28,7 +28,7 @@ td{
 }
 	</style>
 	
-    <div class="col-lg-6">
+    <div class="col-lg-6" style="float: left">
 		<a href="/repo_graph?user={{ owner }}&repo={{ repo }}">View graph for this repo</a>
         <div style="margin-left: 20px">
             <p style="font-weight: bold">Number of Contributions per User</p>
@@ -44,19 +44,21 @@ td{
                 </th>
 
                 {% for contributor in contributors %}
-                <tr>
-                    <td><img src='{{ contributor["avatar_url"] }}' width=20px style="border-radius: 5px"></td>
-                    <td><a href='/user_graph?user={{ contributor["login"] }}'>{{ contributor["login"] }}</a></td>
-                    <td>{{ contributor["contributions"] }}</td>
-                    <td>{{ '%0.2f'| format(contributor["contributions"] * 100 / total | float) }}%</td>
-                </tr>
+					<tr>
+						<td><img src='{{ contributor["avatar_url"] }}' width=20px style="border-radius: 5px"></td>
+						<td><a href='/user_graph?user={{ contributor["login"] }}'>{{ contributor["login"] }}</a></td>
+						<td>{{ contributor["contributions"] }}</td>
+						<td>{{ '%0.2f'| format(contributor["contributions"] * 100 / total | float) }}%</td>
+					</tr>
                 {% endfor %}
             </table>
         </div>
-		
+	</div>
+	<div class="col-lg-6" style="float: right">
 		{{ pi_div | safe }}
 		{{ pi_script | safe }}
     </div>
+	<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
 	<script src='https://cdnjs.cloudflare.com/ajax/libs/bokeh/1.0.4/bokeh.min.js'></script>
 	<script src='https://cdnjs.cloudflare.com/ajax/libs/bokeh/1.0.4/bokeh-widgets.js'></script>
 	<script src='https://cdnjs.cloudflare.com/ajax/libs/bokeh/1.0.4/bokeh-tables.js'></script>

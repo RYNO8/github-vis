@@ -17,7 +17,7 @@ g = Github("test-user1337", "cyrilhas2iq")
 MAX_TIME = 5 # bfs() will take <= 5 seconds
 
 def favLanguage(user):
-    return "A" #stub
+    #return "A" #stub
     if not isinstance(user, str):
         user = user.login
     print("getting language for", user)

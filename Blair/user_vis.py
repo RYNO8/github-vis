@@ -6,7 +6,7 @@
 #table for ronald's pg: https://www.geeksforgeeks.org/python-using-for-loop-in-flask/
 from flask import current_app as app
 
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, render_template, request, jsonify, session
 import requests
 from flask_wtf import FlaskForm
 from flask_bootstrap import Bootstrap
@@ -32,11 +32,13 @@ def_header = {"Accept": "application/vnd.github.v3+json"}
 
 
 def get_user(url, user, headers=def_header):
+    def_header["token"] = session.get("access_token", "")
     result = requests.get(f"https://api.github.com/users/{user}{url}", headers=headers).json()
     return result
 
 
 def get_repo(url, owner, repo, headers=def_header):
+    def_header["token"] = session.get("access_token", "")
     result = requests.get(f"https://api.github.com/repos/{owner}/{repo}/{url}", headers=headers).json()
     return result
 
@@ -80,7 +82,7 @@ def ryanSync():
     favLang = fav_lang(User_repos)
     print(User_info)
     print(User_repos)
-    return render_template("Blair/templates/submit.html", repos=User_repos, user_info=User_info, favLang=favLang)
+    return render_template("Blair/templates/submit.html", repos=User_repos, user_info=User_info, favLang=favLang, numRepos=len(User_repos))
 
 
 def pi_chart(result): #ronalds part

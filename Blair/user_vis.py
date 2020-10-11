@@ -27,19 +27,16 @@ from bokeh.embed import components
 
 
 auth = ("my_client_id", "")
-def_owner = "octocat"
-def_repo = "hello-world"
-others = [("indy256", "codejam-templates"), ("NZIO", "nztrain")]
 def_header = {"Accept": "application/vnd.github.v3+json"}
 
 
 
-def get_user(url="", user=def_owner, headers=def_header):
+def get_user(url, user, headers=def_header):
     result = requests.get(f"https://api.github.com/users/{user}{url}", headers=headers).json()
     return result
 
 
-def get_repo(url, owner=def_owner, repo=def_repo, headers=def_header):
+def get_repo(url, owner, repo, headers=def_header):
     result = requests.get(f"https://api.github.com/repos/{owner}/{repo}/{url}", headers=headers).json()
     return result
 
@@ -138,7 +135,7 @@ def badRepo(repo):
 def ronaldSync():
     Owner = request.args.get("owner")
     Repo = request.args.get("repo")
-    languages = get_repo("languages", owner=Owner, repo=Repo)
+    languages = get_repo("languages", Owner, Repo)
     if languages.get("message", False):
         print(languages["message"])
         return badRepo(Repo)

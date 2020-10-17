@@ -1,0 +1,11 @@
+itsdangerous
+flask
+flask-wtf
+flask-bootstrap4
+flask-bcrypt
+flask-sqlalchemy
+sqlite3
+github
+bokeh
+wtforms
+email-validator

@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    {% block page_title %}{% endblock %} - GitInfo
+{% endblock %}
+
+{% block styles %}
+{{super()}}
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+<link rel="icon" type="image/png" href="static/logo.png">
+<link rel="apple-touch-icon" type="image/png" href="static/logo.png"/>
+{% block head_content %}{% endblock %}
+{% endblock %}
+
+{% block navbar %}
+    <nav class="navbar navbar-default navbar-fixed-top" style="padding: 0px">
+		<div class="navbar-header">
+			<a class="navbar-brand header-size" href="/">
+				<span style="padding: 10px"></span>
+				GitInfo
+				<span><img id="logo" src="/static/logo.png" height=60px></span>
+			</a>
+		</div>
+		
+		<div class="navbar-links">
+		<ul class="nav">
+			<li><a class="navbar-text" href="/dashboard">Dashboard</a></li>
+			<li class="navbar-text theme-switch">
+				<div class="toggle-box">
+					<input type="checkbox" name="checkbox1" id="toggle-box-checkbox">
+					<label for="toggle-box-checkbox" class="toggle-box-label-left"></label>
+					<label for="toggle-box-checkbox" class="toggle-box-label"></label>
+				</div>
+			</li>
+			<div class="dropdown dropdown-nav">
+				<button class="dropbtn">
+					{{ session['user'] }}<img src="static/dropdownicon.png" id="dropdown-icon">
+				</button>
+				<div class="dropdown-content">
+					<a href="/settings">User Settings</a>
+					<a href="{{ url_for('logout') }}" id="logout-button">Logout</a>
+				</div>
+			</div>
+		</ul>
+    </nav>
+{% endblock %}
+
+{% block content %}
+    <body>
+        <div class="container-fluid body-content">
+            {% block page_content %}{% endblock %}
+        </div>
+
+        <div class="container-fluid footer">
+            <hr>
+            <p class="panel-footer footer-text"><a href="#" class="footer-right">Back to Top</a></p>
+        </div>
+		
+		<script src="{{url_for('static', filename='themetoggle.js')}}"></script>
+    </body>
+
+{% endblock %}

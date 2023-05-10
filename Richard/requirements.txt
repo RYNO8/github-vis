@@ -1,5 +1,0 @@
-flask-wtf
-flask
-wtforms
-flask-bootstrap4
-email-validator

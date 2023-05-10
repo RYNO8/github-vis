@@ -1,0 +1,40 @@
+{%  extends 'dashboardBase.html' %}
+
+{%  block page_title %} Dashboard {%  endblock %}
+{% block page_content %}
+	<style>
+.click-box {
+	padding: 50px;
+	margin: 20px;
+	width: 400px;
+	height: 500px;
+	border: 5px solid black;
+}
+.go-button {
+	bottom: 180px;
+    position: absolute;
+	background-color: var(--nav-primary-col);
+    border: none;
+    color: white;
+    padding: 15px 32px;
+	transform: translate(-50%); // make up difference from padding shift
+}
+	</style>
+	<h1>Results for user: <b>{{ user }}</b></h1>
+	<h1>And repo: <b>{{ repo }}</b></h1>
+	<table style="margin: auto">
+		<tr>
+			<td><div class="click-box">
+				<h2>View a graph of this repository</h2>
+				<i>* may take up to 10 seconds to load</i>
+				<br><img src="static/user_graph.png" width=180px><br><br>
+				<a class="go-button" href="/repo_graph?user={{user}}&repo={{repo}}" target="_blank">GO</a>
+			</div></td>
+			<td><div class="click-box">
+				<h2>View details about this repository</h2>
+				<br><img src="static/repo_graph.png" width=180px><br><br>
+				<a class="go-button" href="/ronaldsubmit?owner={{user}}&repo={{repo}}" target="_blank">GO</a>
+			</div></td>
+		</tr>
+	</table>
+{%  endblock %}
